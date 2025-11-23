@@ -3,3 +3,42 @@
 @plugin "daisyui" {
   themes: light --default;
 }
+
+
+.text-primary {
+  color: #F59E0B ;
+  /* color: #3B82F6; */
+  /* color: #8B5CF6; */
+  /* color: #8F5298; */
+}
+.text-secondary {
+  /* color:#2B103C ; */
+  /* color:#F59E0B ; */
+  color:#1F2937 ;
+  /* color:#EC4899 ; */
+}
+
+
+
+
+.bg-primary {
+  /* background-color: #AC91C0; */
+  background-color:#F97316 ;
+}
+.bg-secondary {
+  background-color: #EC4899;
+  /* background-color: #2B103C; */
+}
+
+
+.border-primary {
+  border-color: #3D2A5D;
+}
+.btn-primary {
+background-color: #F97316;
+/* background-color: #8B5CF6; */
+/* background-color: #572866; */
+}
+.btn-secondary{
+  background-color:#1F2937 ;
+}

@@ -10,7 +10,7 @@ const Products = async () => {
     return (
         <div>
             <div className="text-center my-10">
-                <h1 className="text-4xl font-bold">Our Products</h1>
+                <h1 className="text-4xl text-secondary font-bold"><span className='text-primary'>Our</span> Products</h1>
                 <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
                     Explore our premium collection of hoodies designed for comfort,
                     durability, and style. Find the perfect fit for every season.

@@ -3,19 +3,22 @@ import { ChartNoAxesGantt, CirclePlusIcon, CircleUserRoundIcon, UserRoundPen } f
 import Link from 'next/link';
 import React from 'react';
 
+import Image from 'next/image';
+import NavLink from './NavLink';
+
 const Navbar = () => {
 
     const user = true;
 
     const link = <>
-        <li><Link href='/' > Home </Link></li>
-        <li><Link href='/products' > All Products </Link></li>
-        <li><Link href='/about' > About Us </Link></li>
-        <li><Link href='/cart' > Cart </Link></li>
-        <li><Link href='/faq' > FAQ </Link></li>
+        <li><NavLink className='font-semibold' href='/' > Home </NavLink></li>
+        <li><NavLink className='font-semibold' href='/products' > All Products </NavLink></li>
+        <li><NavLink className='font-semibold' href='/about' > About Us </NavLink></li>
+        <li><NavLink className='font-semibold' href='/cart' > Cart </NavLink></li>
+        <li><NavLink className='font-semibold' href='/faq' > FAQ </NavLink></li>
     </>
     return (
-        <div className="navbar bg-base-100 shadow-sm">
+        <div className="navbar sticky top-0 z-100 bg-linear-to-r to-orange-100 shadow-xl">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -27,7 +30,16 @@ const Navbar = () => {
                         {link}
                     </ul>
                 </div>
-                <Link className='font-bold text-2xl' href='/' >NexCart</Link>
+                <Link className='font-bold flex items-center text-2xl' href='/' >
+                    <Image
+                        src="/logo.png"
+                        alt="N-Cart Logo"
+                        width={50}
+                        height={30}// Use 'fill' to cover the parent container
+                        sizes="(max-width: 768px) 100vw, 50vw" // Helps Next.js optimize
+                        style={{ objectFit: "contain" }} // Ensures the image is fully visible
+                    />
+                    NexCart</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
@@ -38,14 +50,14 @@ const Navbar = () => {
                 {
                     user ?
                         (<div className="dropdown dropdown-end">
-                            <div tabIndex={0} role="button" className=" m-1"><CircleUserRoundIcon/></div>
+                            <div tabIndex={0} role="button" className=" m-1"><CircleUserRoundIcon /></div>
                             <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                                <li><Link href='/profile' >   <UserRoundPen /> Profile</Link></li>
-                                <li><Link href='/dashboard/add-products' >     <CirclePlusIcon /> Add Products</Link></li>
-                                <li><Link href='/dashboard/manage-products' >   <ChartNoAxesGantt /> Manage Products</Link></li>
-                                <button className='btn btn-primary btn-sm' >Logout</button>
-                              
-                                
+                                <li><NavLink href='/profile' >   <UserRoundPen /> Profile</NavLink></li>
+                                <li><NavLink href='/dashboard/add-products' >     <CirclePlusIcon /> Add Products</NavLink></li>
+                                <li><NavLink href='/dashboard/manage-products' >   <ChartNoAxesGantt /> Manage Products</NavLink></li>
+                                <button className='btn bg-linear-to-r from-orange-500 to-amber-200 btn-sm' >Logout</button>
+
+
                             </ul>
                         </div>)
                         :

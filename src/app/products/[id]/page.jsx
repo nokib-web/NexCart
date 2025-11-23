@@ -28,10 +28,10 @@ export default async function ProductDetails({ params }) {
                 {/* Product Info */}
                 <div className="flex flex-col justify-between">
                     <div>
-                        <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
+                        <h1 className="text-4xl text-primary font-bold mb-4">{product.name}</h1>
 
                         <div className="flex items-center gap-2 mb-4">
-                            <Star className="text-yellow-500" size={22} />
+                            <Star className="text-primary" size={22} />
                             <span className="text-lg font-medium">{product.rating} / 5</span>
                         </div>
 
@@ -50,7 +50,7 @@ export default async function ProductDetails({ params }) {
                                 {product.sizes?.map((s) => (
                                     <span
                                         key={s}
-                                        className="px-4 py-2 border rounded-lg cursor-pointer hover:bg-primary hover:text-white transition"
+                                        className="px-4 py-2 bg-primary  rounded-lg cursor-pointer hover:bg-amber-600 hover:text-white transition"
                                     >
                                         {s}
                                     </span>
@@ -75,7 +75,7 @@ export default async function ProductDetails({ params }) {
 
                     {/* Add To Cart Section */}
                     <div>
-                        <button className="btn btn-primary w-full flex items-center gap-2">
+                        <button className="btn bg-linear-to-r from-orange-500 to-amber-200 w-full border-0 shadow-2xl flex items-center gap-2">
                             <ShoppingCart size={20} /> Add to Cart
                         </button>
                     </div>
@@ -84,7 +84,7 @@ export default async function ProductDetails({ params }) {
 
             {/* Extra Info */}
             <div className="grid md:grid-cols-3 gap-6 mt-16">
-                <div className="p-6 border rounded-xl shadow-sm flex gap-3">
+                <div className="p-6  rounded-xl shadow-xl  bg-linear-to-r from-orange-100 to-amber-100 flex gap-3">
                     <Truck className="text-primary" size={26} />
                     <div>
                         <h4 className="font-semibold">Fast Delivery</h4>
@@ -92,7 +92,7 @@ export default async function ProductDetails({ params }) {
                     </div>
                 </div>
 
-                <div className="p-6 border rounded-xl shadow-sm flex gap-3">
+                <div className="p-6  rounded-xl shadow-xl  bg-linear-to-r from-orange-100 to-amber-100 flex gap-3">
                     <ShieldCheck className="text-primary" size={26} />
                     <div>
                         <h4 className="font-semibold">Quality Guaranteed</h4>
@@ -100,7 +100,7 @@ export default async function ProductDetails({ params }) {
                     </div>
                 </div>
 
-                <div className="p-6 border rounded-xl shadow-sm flex gap-3">
+                <div className="p-6  rounded-xl shadow-xl bg-linear-to-r from-orange-100 to-amber-100  flex gap-3">
                     <Star className="text-primary" size={26} />
                     <div>
                         <h4 className="font-semibold">Top Rated</h4>

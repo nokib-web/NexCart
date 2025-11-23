@@ -12,8 +12,8 @@ export default function AboutPage() {
     <div className="min-h-screen bg-base-100">
       {/* Top Section */}
       <section className="max-w-6xl mx-auto px-4 py-20 text-center">
-        <h1 className="text-5xl font-bold mb-6">
-          About <span className="text-primary">NexCart</span>
+        <h1 className="text-5xl text-primary font-bold mb-6">
+          About <span className="text-secondary">NexCart</span>
         </h1>
 
         <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -26,7 +26,7 @@ export default function AboutPage() {
       {/* Values / Features */}
       <section className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8">
         {/* Feature 1 */}
-        <div className="card bg-base-100 shadow-xl p-8  hover:shadow-2xl transition">
+        <div className="card bg-linear-to-r from-orange-50 to-amber-50 shadow-xl p-8  hover:shadow-2xl transition">
           <Shirt size={44} className="text-primary mb-4" />
           <h3 className="text-2xl font-semibold mb-2">Premium Craftsmanship</h3>
           <p className="text-gray-500">
@@ -36,7 +36,7 @@ export default function AboutPage() {
         </div>
 
         {/* Feature 2 */}
-        <div className="card bg-base-100 shadow-xl p-8  hover:shadow-2xl transition">
+        <div className="card bg-linear-to-r from-orange-50 to-amber-50 shadow-xl p-8  hover:shadow-2xl transition">
           <Leaf size={44} className="text-primary mb-4" />
           <h3 className="text-2xl font-semibold mb-2">Eco-Friendly Production</h3>
           <p className="text-gray-500">
@@ -46,7 +46,7 @@ export default function AboutPage() {
         </div>
 
         {/* Feature 3 */}
-        <div className="card bg-base-100 shadow-xl p-8  hover:shadow-2xl transition">
+        <div className="card bg-linear-to-r from-orange-50 to-amber-50 shadow-xl p-8  hover:shadow-2xl transition">
           <ShieldCheck size={44} className="text-primary mb-4" />
           <h3 className="text-2xl font-semibold mb-2">Trusted Quality</h3>
           <p className="text-gray-500">
@@ -57,28 +57,44 @@ export default function AboutPage() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="bg-base-300 rounded-xl py-20 mt-10">
-        <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-12">
+<section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-50 via-amber-50 to-orange-100 py-20 mt-14">
 
-          {/* Mission */}
-          <div>
-            <h2 className="text-3xl font-bold mb-4 text-primary">Our Mission</h2>
-            <p className="text-gray-600 text-lg leading-relaxed">
-              To make high-quality hoodies accessible for everyone and build a
-              sustainable fashion experience that respects people and the planet.
-            </p>
-          </div>
+  {/* Decorative Background Shape */}
+  <div className="absolute inset-0 opacity-20 bg-[url('/pattern.svg')] bg-cover bg-center pointer-events-none"></div>
 
-          {/* Vision */}
-          <div>
-            <h2 className="text-3xl font-bold mb-4 text-primary">Our Vision</h2>
-            <p className="text-gray-600 text-lg leading-relaxed">
-              To become a global hoodie brand known for comfort, style, and
-              eco-responsibility — setting new standards in modern apparel.
-            </p>
-          </div>
-        </div>
-      </section>
+  <div className="relative max-w-6xl mx-auto px-4 lg:px-6 grid md:grid-cols-2 gap-14">
+
+    {/* Mission */}
+    <div className="group transition-all">
+      <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 text-primary tracking-tight">
+        Our Mission
+      </h2>
+      <p className="text-gray-700 text-lg leading-relaxed font-medium">
+        Our mission is to make premium-quality hoodies accessible for everyone, blending
+        comfort, durability, and modern style. We aim to create a sustainable fashion
+        journey that prioritizes people, the planet, and timeless craftsmanship.
+      </p>
+
+      <div className="mt-6 h-1 w-16 bg-primary rounded-full group-hover:w-24 transition-all duration-300"></div>
+    </div>
+
+    {/* Vision */}
+    <div className="group transition-all">
+      <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 text-primary tracking-tight">
+        Our Vision
+      </h2>
+      <p className="text-gray-700 text-lg leading-relaxed font-medium">
+        Our vision is to become a globally recognized hoodie brand known for unmatched
+        comfort, minimalist aesthetic, and eco-conscious manufacturing — setting a new
+        benchmark for modern apparel worldwide.
+      </p>
+
+      <div className="mt-6 h-1 w-16 bg-primary rounded-full group-hover:w-24 transition-all duration-300"></div>
+    </div>
+
+  </div>
+</section>
+
 
       {/* Why Choose Us */}
       <section className="max-w-6xl mx-auto px-4 py-20">
@@ -87,7 +103,7 @@ export default function AboutPage() {
         </h2>
 
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="p-6  rounded-xl shadow-xl hover:shadow-lg transition">
+          <div className="p-6 bg-linear-to-r from-orange-50 to-amber-50 rounded-xl shadow-xl hover:shadow-lg transition">
             <Factory size={40} className="text-primary mb-3" />
             <h3 className="text-xl font-semibold mb-2">Modern Manufacturing</h3>
             <p className="text-gray-500">
@@ -96,7 +112,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="p-6  rounded-xl shadow-xl hover:shadow-lg transition">
+          <div className="p-6 bg-linear-to-r from-orange-50 to-amber-50 rounded-xl shadow-xl hover:shadow-lg transition">
             <Globe2 size={40} className="text-primary mb-3" />
             <h3 className="text-xl font-semibold mb-2">Global Standard</h3>
             <p className="text-gray-500">
@@ -104,7 +120,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="p-6  rounded-xl shadow-xl hover:shadow-lg transition">
+          <div className="p-6 bg-linear-to-r from-orange-50 to-amber-50 rounded-xl shadow-xl hover:shadow-lg transition">
             <HeartHandshake size={40} className="text-primary mb-3" />
             <h3 className="text-xl font-semibold mb-2">Customer-First Ethics</h3>
             <p className="text-gray-500">
