@@ -3,7 +3,7 @@ import { Search } from 'lucide-react';
 import React from 'react';
 
 const Products = async () => {
-    const data = await fetch('https://nexcart-server.onrender.com//products')
+    const data = await fetch('https://nexcart-server.onrender.com/products')
     const products = await data.json()
     console.log(products)
 
