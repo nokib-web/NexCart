@@ -1,11 +1,8 @@
-import React from 'react';
+export default function Profile() {
+  return (
+    <div>
+      i am Profile
+    </div>
+  );
+}
 
-const Profile = () => {
-    return (
-        <div>
-            i am your profile
-        </div>
-    );
-};
-
-export default Profile;

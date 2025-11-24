@@ -47,7 +47,7 @@ const Footer = () => {
                 </div>
             </nav>
             <aside>
-                <p>Copyright © {new Date().getFullYear()} - All right reserved by NexCart Shopping Ltd</p>
+                <p>Copyright © 2025 - All right reserved by NexCart Shopping Ltd</p>
             </aside>
         </footer>
     );
