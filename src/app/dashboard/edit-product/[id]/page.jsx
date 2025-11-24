@@ -21,7 +21,7 @@ const EditProductPage = () => {
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState(null);
 
-    const EXPRESS_API_URL = 'http://localhost:5000/products';
+    const EXPRESS_API_URL = 'https://nexcart-server.onrender.com/products';
 
     // 1. Fetch existing product data
     useEffect(() => {

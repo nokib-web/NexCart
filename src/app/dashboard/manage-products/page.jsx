@@ -13,7 +13,7 @@ const ManageProductsPage = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const EXPRESS_API_URL = 'http://localhost:5000/products'; // Adjust if your port/path differs
+    const EXPRESS_API_URL = 'https://nexcart-server.onrender.com/products'; // Adjust if your port/path differs
 
     // 1. Function to fetch products
     const fetchProducts = useCallback(async () => {

@@ -5,7 +5,7 @@ import Image from "next/image";
 export default async function ProductDetails({ params }) {
     const { id } = await params;
 
-    const res = await fetch(`http://localhost:5000/products/${id}`, {
+    const res = await fetch(`https://nexcart-server.onrender.com/products/${id}`, {
         cache: "no-store",
     });
     const product = await res.json();

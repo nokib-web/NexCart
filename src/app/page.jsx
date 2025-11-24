@@ -1,13 +1,13 @@
 
 
-import Image from "next/image";
+
 import { ShoppingBag, TrendingUp, ShieldCheck, Truck } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
 import Carousel from "@/components/Carousel";
 
 export default async function Home() {
-  const data = await fetch('http://localhost:5000/top-products')
-  const products = await data.json()
+  const data = await fetch('https://nexcart-server.onrender.com/top-products')
+  const products = await JSON.parse(data);
   return (
     <div className="w-full  ">
 

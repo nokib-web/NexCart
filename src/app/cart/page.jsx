@@ -22,7 +22,7 @@ export default function CartPage() {
     const fetchCart = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:5000/cart/${userId}`);
+        const res = await fetch(`https://nexcart-server.onrender.com/cart/${userId}`);
         const data = await res.json();
         setCart(data);
       } catch (err) {
@@ -46,7 +46,7 @@ export default function CartPage() {
       try {
         const productIds = cart.map(item => item.productId);
 
-        const res = await fetch("http://localhost:5000/products/by-ids", {
+        const res = await fetch("https://nexcart-server.onrender.com/products/by-ids", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ productIds }),
@@ -83,7 +83,7 @@ export default function CartPage() {
     setUpdatingItems(prev => new Set(prev).add(cartItemId));
 
     try {
-      const res = await fetch(`http://localhost:5000/cart/${cartItemId}`, {
+      const res = await fetch(`https://nexcart-server.onrender.com/cart/${cartItemId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity: newQty }),
@@ -110,7 +110,7 @@ export default function CartPage() {
 
   const removeItem = async (cartItemId) => {
     try {
-      await fetch(`http://localhost:5000/cart/${cartItemId}`, { method: "DELETE" });
+      await fetch(`https://nexcart-server.onrender.com/cart/${cartItemId}`, { method: "DELETE" });
       setCart(prev => prev.filter(item => item._id !== cartItemId));
       toast.success("Removed from cart");
     } catch (err) {

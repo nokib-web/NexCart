@@ -28,7 +28,7 @@ const AddProductPage = () => {
 
         try {
             // 1. No token required! The fetch call is much simpler.
-            const res = await fetch('http://localhost:5000/products', { // <-- Use the correct Express URL
+            const res = await fetch('https://nexcart-server.onrender.com/products', { // <-- Use the correct Express URL
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
