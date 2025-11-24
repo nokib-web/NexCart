@@ -1,3 +1,4 @@
+import AddToCartButton from "@/components/AddToCartButton";
 import { ShoppingCart, Star, Truck, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 
@@ -75,9 +76,7 @@ export default async function ProductDetails({ params }) {
 
                     {/* Add To Cart Section */}
                     <div>
-                        <button className="btn bg-linear-to-r from-orange-500 to-amber-200 w-full border-0 shadow-2xl flex items-center gap-2">
-                            <ShoppingCart size={20} /> Add to Cart
-                        </button>
+                        <AddToCartButton productId={product._id} />
                     </div>
                 </div>
             </div>

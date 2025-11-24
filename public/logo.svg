@@ -1,0 +1,27 @@
+<svg width="220" height="220" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+ 
+  <!-- Main Icon: Stylized "N" + Shopping Bag Fusion -->
+  <path d="M56 62V98C56 98 56 106 64 106H96C104 106 104 98 104 98V62" 
+        stroke="url(#main)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M64 78H96" 
+        stroke="url(#main)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M68 62C68 54 74 48 80 48C86 48 92 54 92 62" 
+        stroke="url(#main)" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Gradient Definitions -->
+  <defs>
+    <!-- Main Orange Gradient -->
+    <linearGradient id="main" x1="56" y1="48" x2="104" y2="106" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FB923C"/> <!-- orange-400 -->
+      <stop offset="1" stop-color="#F97316"/> <!-- orange-500 -->
+    </linearGradient>
+    
+    
+    
+    <!-- Subtle Inner Glow -->
+    <radialGradient id="glow">
+      <stop offset="0%" stop-color="#FB923C"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>

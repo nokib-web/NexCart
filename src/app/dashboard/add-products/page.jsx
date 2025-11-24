@@ -9,11 +9,11 @@ const AddProductPage = () => {
     // We removed useAuth(), so the form submission is simpler
 
     const [formData, setFormData] = useState({
-        title: '',
-        shortDescription: '',
-        fullDescription: '',
+        name: '',
+        material: '',
+        description: '',
         price: '', // The number field (e.g., Price)
-        imageUrl: '',
+        image: '',
     });
     const [loading, setLoading] = useState(false);
 
@@ -40,7 +40,7 @@ const AddProductPage = () => {
             if (res.ok) {
                 toast.success('🎉 Product added successfully!');
                 // Reset form fields
-                setFormData({ title: '', shortDescription: '', fullDescription: '', price: '', imageUrl: '' });
+                setFormData({ name: '', description: '', material: '', price: '', image: '' });
             } else {
                 toast.error(`❌ Failed to add product. Status: ${res.status}`);
             }
@@ -61,17 +61,17 @@ const AddProductPage = () => {
 
                 {/* Title */}
                 <div className="form-control mb-4"><label className="label"><span className="label-text">Title</span></label>
-                    <input type="text" name="title" value={formData.name} onChange={handleChange} className="input input-bordered w-full" required />
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} className="input input-bordered w-full" required />
                 </div>
 
                 {/* Short Description */}
                 <div className="form-control mb-4"><label className="label"><span className="label-text">Short Description</span></label>
-                    <input type="text" name="shortDescription" value={formData.description} onChange={handleChange} className="input input-bordered w-full" required />
+                    <input type="text" name="description" value={formData.description} onChange={handleChange} className="input input-bordered w-full" required />
                 </div>
 
                 {/* Full Description */}
-                <div className="form-control mb-4"><label className="label"><span className="label-text">Full Description</span></label>
-                    <textarea name="fullDescription" value={formData.fullDescription} onChange={handleChange} className="textarea textarea-bordered h-24 w-full" required></textarea>
+                <div className="form-control mb-4"><label className="label"><span className="label-text">Material</span></label>
+                    <textarea name="material" value={formData.material} onChange={handleChange} className="input input-bordered w-full" required></textarea>
                 </div>
 
                 {/* Price Field */}
@@ -81,7 +81,7 @@ const AddProductPage = () => {
 
                 {/* Optional Image URL */}
                 <div className="form-control mb-6"><label className="label"><span className="label-text">Image URL (Optional)</span></label>
-                    <input type="url" name="imageUrl" value={formData.imageUrl} onChange={handleChange} className="input input-bordered w-full" />
+                    <input type="url" name="image" value={formData.image} onChange={handleChange} className="input input-bordered w-full" />
                 </div>
 
                 {/* Submit Button */}

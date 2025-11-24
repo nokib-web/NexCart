@@ -1,102 +1,137 @@
-'use client'; // This component must be a Client Component to use Clerk hooks
+'use client';
 
-import { ChartNoAxesGantt, CirclePlusIcon, CircleUserRoundIcon, UserRoundPen } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { ChartNoAxesGantt, CirclePlusIcon, UserRoundPen } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react';
-
-import { useUser, SignedIn, SignedOut, UserButton, SignOutButton } from '@clerk/nextjs'; // Import Clerk components and hook
-
 import Image from 'next/image';
 import NavLink from './NavLink';
+import { useUser, UserButton, SignOutButton } from '@clerk/nextjs';
 
 const Navbar = () => {
-    // 1. Use the useUser hook from Clerk
-    const { isLoaded, isSignedIn, user } = useUser();
+    const { isLoaded, isSignedIn } = useUser();
 
-    // Clerk's useUser hook is asynchronous.
-    // While it's loading, you might want to show a loading state or nothing.
-    if (!isLoaded) {
-        return null; // Or a loading spinner
-    }
+    // Scroll state
+    const [visible, setVisible] = useState(true);
+    const [prevScrollPos, setPrevScrollPos] = useState(0);
 
-    const link = <>
-        <li><NavLink className='font-semibold' href='/' > Home </NavLink></li>
-        <li><NavLink className='font-semibold' href='/products' > All Products </NavLink></li>
-        <li><NavLink className='font-semibold' href='/about' > About Us </NavLink></li>
-        <li><NavLink className='font-semibold' href='/cart' > Cart </NavLink></li>
-        <li><NavLink className='font-semibold' href='/faq' > FAQ </NavLink></li>
-    </>
-    // admin route will be here
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollPos = window.scrollY;
+
+            // Show navbar if:
+            // - Scrolling up
+            // - Or near the top (< 100px)
+            if (currentScrollPos < prevScrollPos || currentScrollPos < 100) {
+                setVisible(true);
+            } 
+            // Hide only when scrolling down AND past 100px
+            else if (currentScrollPos > prevScrollPos && currentScrollPos > 100) {
+                setVisible(false);
+            }
+
+            setPrevScrollPos(currentScrollPos);
+        };
+
+        // Use requestAnimationFrame for buttery smooth performance
+        let ticking = false;
+        const optimizedScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    handleScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        window.addEventListener("scroll", optimizedScroll, { passive: true });
+        return () => window.removeEventListener("scroll", optimizedScroll);
+    }, [prevScrollPos]);
+
+    if (!isLoaded) return null;
+
+    const link = (
+        <>
+            <li><NavLink className='font-semibold' href='/' > Home </NavLink></li>
+            <li><NavLink className='font-semibold' href='/products' > All Products </NavLink></li>
+            <li><NavLink className='font-semibold' href='/about' > About Us </NavLink></li>
+            <li><NavLink className='font-semibold' href='/cart' > Cart </NavLink></li>
+            <li><NavLink className='font-semibold' href='/faq' > FAQ </NavLink></li>
+        </>
+    );
 
     return (
-        <div className="navbar sticky top-0 z-50 bg-linear-to-r to-orange-100 shadow-xl">
-            <div className="navbar-start">
-
-                <div className="dropdown">
-                    <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
+        <>
+            {/* Your exact navbar with perfect scroll behavior */}
+            <div
+                className={`
+                    navbar fixed top-0 left-0 right-0 z-50 
+                    bg-gradient-to-r from-orange-50 to-orange-100 shadow-xl
+                    transition-transform duration-400 ease-out
+                    ${visible ? 'translate-y-0' : '-translate-y-full'}
+                    will-change-transform
+                `}
+                style={{ backdropFilter: visible ? 'blur(10px)' : 'none' }}
+            >
+                <div className="navbar-start">
+                    <div className="dropdown">
+                        <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+                            </svg>
+                        </div>
+                        <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                            {link}
+                        </ul>
                     </div>
-                    <ul
-                        tabIndex="-1"
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+
+                    <Link className='font-bold flex items-center text-2xl' href='/' >
+                        <Image
+                            src="/logo.svg"
+                            alt="N-Cart Logo"
+                            width={50}
+                            height={30}
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            style={{ objectFit: "contain" }}
+                        />
+                        NexCart
+                    </Link>
+                </div>
+
+                <div className="navbar-center hidden lg:flex">
+                    <ul className="menu menu-horizontal px-1">
                         {link}
                     </ul>
                 </div>
-                <Link className='font-bold flex items-center text-2xl' href='/' >
-                    <Image
-                        src="/logo.png"
-                        alt="N-Cart Logo"
-                        width={50}
-                        height={30}
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        style={{ objectFit: "contain" }}
-                    />
-                    NexCart
-                </Link>
-            </div>
-            <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1">
-                    {link}
-                </ul>
-            </div>
 
-            <div className="navbar-end">
+                <div className="navbar-end">
+                    {isSignedIn ? (
+                        <div className="dropdown dropdown-end">
+                            <div tabIndex={0} role="button" className="m-1">
+                                <UserButton />
+                            </div>
 
-                {isSignedIn ? (
-                    <div className="dropdown dropdown-end">
+                            <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-sm">
+                                <li><NavLink href='/profile' > <UserRoundPen /> Profile</NavLink></li>
+                                <li><NavLink href='/dashboard/add-products' > <CirclePlusIcon /> Add Products</NavLink></li>
+                                <li><NavLink href='/dashboard/manage-products' > <ChartNoAxesGantt /> Manage Products</NavLink></li>
 
-                        <div tabIndex={0} role="button" className="m-1">
-
-                            <UserButton />
+                                <SignOutButton>
+                                    <button className='btn bg-gradient-to-r from-orange-500 to-amber-200 btn-sm w-full mt-2'>Logout</button>
+                                </SignOutButton>
+                            </ul>
                         </div>
-
-                        <ul tabIndex={-1} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                            <li><NavLink href='/profile' > <UserRoundPen /> Profile</NavLink></li>
-                            <li><NavLink href='/dashboard/add-products' > <CirclePlusIcon /> Add Products</NavLink></li>
-                            <li><NavLink href='/dashboard/manage-products' > <ChartNoAxesGantt /> Manage Products</NavLink></li>
-
-
-
-                            {/* Conditionally render admin links based  logic */}
-
-
-
-
-                            <SignOutButton>
-                                <button className='btn bg-linear-to-r from-orange-500 to-amber-200 btn-sm'>Logout</button>
-                            </SignOutButton>
-                        </ul>
-                    </div>
-                ) : (
-                    // User is NOT signed in
-                    <Link href='/login' >
-                        <button className='btn btn-secondary'>Login</button>
-                    </Link>
-                )}
-
-
+                    ) : (
+                        <Link href='/login'>
+                            <button className='btn btn-secondary'>Login</button>
+                        </Link>
+                    )}
+                </div>
             </div>
-        </div>
+
+            {/* This prevents content from being hidden under navbar when it's visible */}
+            <div className="h-20" />
+        </>
     );
 };
 
