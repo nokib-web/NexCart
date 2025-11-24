@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,6 +6,12 @@ import Footer from "@/components/Footer";
 import {
   ClerkProvider,
 } from '@clerk/nextjs'
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +38,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" className={inter.className} >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

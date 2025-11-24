@@ -94,7 +94,7 @@ const Navbar = () => {
                             sizes="(max-width: 768px) 100vw, 50vw"
                             style={{ objectFit: "contain" }}
                         />
-                        NexCart
+                        Nex<span className="text-primary">Cart</span>
                     </Link>
                 </div>
 

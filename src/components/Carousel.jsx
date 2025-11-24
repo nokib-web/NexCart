@@ -69,10 +69,10 @@ const Carousel = () => {
         className="
           relative w-full 
           h-40       
-          sm:h-[220px]   
-          md:h-[300px]   
-          lg:h-[380px]   
-          xl:h-[450px]   
+          sm:h-60   
+          md:h-70  
+          lg:h-80   
+          xl:h-100  
           overflow-hidden rounded-xl shadow-xl
         "
       >
