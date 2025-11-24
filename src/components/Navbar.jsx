@@ -66,7 +66,7 @@ const Navbar = () => {
             <div
                 className={`
                     navbar fixed top-0 left-0 right-0 z-50 
-                    bg-gradient-to-r from-orange-50 to-orange-100 shadow-xl
+                    bg-linear-to-r from-orange-50 to-orange-100 shadow-xl
                     transition-transform duration-400 ease-out
                     ${visible ? 'translate-y-0' : '-translate-y-full'}
                     will-change-transform
@@ -80,7 +80,7 @@ const Navbar = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
                             </svg>
                         </div>
-                        <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                        <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                             {link}
                         </ul>
                     </div>
@@ -111,13 +111,13 @@ const Navbar = () => {
                                 <UserButton />
                             </div>
 
-                            <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-sm">
+                            <ul className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                                 <li><NavLink href='/profile' > <UserRoundPen /> Profile</NavLink></li>
                                 <li><NavLink href='/dashboard/add-products' > <CirclePlusIcon /> Add Products</NavLink></li>
                                 <li><NavLink href='/dashboard/manage-products' > <ChartNoAxesGantt /> Manage Products</NavLink></li>
 
                                 <SignOutButton>
-                                    <button className='btn bg-gradient-to-r from-orange-500 to-amber-200 btn-sm w-full mt-2'>Logout</button>
+                                    <button className='btn bg-linear-to-r from-orange-500 to-amber-200 btn-sm w-full mt-2'>Logout</button>
                                 </SignOutButton>
                             </ul>
                         </div>

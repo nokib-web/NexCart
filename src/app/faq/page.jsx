@@ -106,7 +106,7 @@ export default function FAQSection() {
                 <div className="space-y-12">
                     {faqs.map((group, groupIdx) => (
                         <div key={groupIdx} className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                            <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-6 text-white">
+                            <div className="bg-linear-to-r from-orange-500 to-amber-500 p-6 text-white">
                                 <div className="flex items-center gap-4">
                                     <div className="p-3 bg-white/20 rounded-lg backdrop-blur">
                                         {group.icon}

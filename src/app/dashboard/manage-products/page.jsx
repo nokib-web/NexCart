@@ -123,7 +123,7 @@ const ManageProductsPage = () => {
 
                             {/* Body */}
                             <div className="card-body p-4">
-                                <h2 className="card-title text-lg font-semibold line-clamp-2 min-h-[3rem]">
+                                <h2 className="card-title text-lg font-semibold line-clamp-2 min-h-12">
                                     {title}
                                 </h2>
                                 <p className="text-lg font-bold text-primary">${price}</p>
