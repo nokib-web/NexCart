@@ -57,11 +57,13 @@ const Navbar = () => {
             {
                 isSignedIn ? <li><NavLink className='font-semibold' href='/cart' > Cart </NavLink></li> : ""
             }
-            <li><NavLink className='font-semibold' href='/about' > About Us </NavLink></li>
-            <li><NavLink className='font-semibold' href='/faq' > FAQ </NavLink></li>
+            <li><NavLink className='font-semibold' href='/company/about' > About Us </NavLink></li>
+            <li><NavLink className='font-semibold' href='/company/faq' > FAQ </NavLink></li>
 
             {
-                isSignedIn? "": <li><NavLink className='font-semibold' href='/register' > Register </NavLink></li>
+                isSignedIn? 
+                <li><NavLink className='font-semibold' href='/dashboard' > Dashboard </NavLink></li>   : 
+                <li><NavLink className='font-semibold' href='/register' > Register </NavLink></li>
             }
            
 

@@ -37,13 +37,14 @@ export const metadata = {
 
 
 export default function RootLayout({ children }) {
+    const isDashboard = typeof window !== "undefined" && window.location.pathname.startsWith("/dashboard");
   return (
     <ClerkProvider>
       <html lang="en" className={inter.className} >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar></Navbar>
+         {!isDashboard && <Navbar />}
         <div className="w-11/12 mx-auto">{children}</div>
         <Toaster/>
         <Footer></Footer>

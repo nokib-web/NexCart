@@ -44,7 +44,7 @@ export default function AddToCartButton({ productId }) {
   return (
     <button
       onClick={handleAddToCart}
-      className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-4 rounded-xl shadow-2xl flex items-center justify-center gap-3 transition-all duration-300 active:scale-95"
+      className="w-full bg-linear-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-4 rounded-xl shadow-2xl flex items-center justify-center gap-3 transition-all duration-300 active:scale-95"
     >
       <ShoppingCart size={22} />
       Add to Cart

@@ -1,6 +1,7 @@
 import AddToCartButton from "@/components/AddToCartButton";
 import { ShoppingCart, Star, Truck, ShieldCheck } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function ProductDetails({ params }) {
     const { id } = await params;
@@ -76,9 +77,12 @@ export default async function ProductDetails({ params }) {
 
                     {/* Add To Cart Section */}
                     <div>
-                        <AddToCartButton productId={product._id} />
+                        <AddToCartButton productId={product._id} /> 
                     </div>
+
+                   
                 </div>
+                
             </div>
 
             {/* Extra Info */}
@@ -109,6 +113,7 @@ export default async function ProductDetails({ params }) {
                     </div>
                 </div>
             </div>
+             <Link href='/products'><button className="btn mt-10 mx-auto w-1/4 border-0 shadow-2xl flex justify-center  items-center btn-secondary btn-sm text-White ">Go Back</button></Link>
         </div>
     );
 }
