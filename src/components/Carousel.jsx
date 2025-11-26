@@ -57,8 +57,12 @@ const Carousel = () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(nextSlide, 5000);
-    return () => clearInterval(interval);
+    const timeout = setTimeout(() => {
+      const interval = setInterval(nextSlide, 5000);
+      return () => clearInterval(interval);
+    }, 100); // small delay to ensure hydration done
+
+    return () => clearTimeout(timeout);
   }, [nextSlide]);
 
   return (
@@ -70,18 +74,17 @@ const Carousel = () => {
           relative w-full 
           h-40       
           sm:h-60   
-          md:h-70  
+          md:h-72  
           lg:h-80   
-          xl:h-100  
+         xl:h-112 
           overflow-hidden rounded-xl shadow-xl
         "
       >
         {heroBanners.map((banner, index) => (
           <div
             key={banner.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === activeIndex ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ${index === activeIndex ? "opacity-100" : "opacity-0"
+              }`}
             style={{
               backgroundImage: `url(${banner.src})`,
               backgroundSize: "cover",
@@ -127,11 +130,10 @@ const Carousel = () => {
           <button
             key={index}
             onClick={() => setActiveIndex(index)}
-            className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
-              index === activeIndex
-                ? "bg-primary scale-125"
-                : "bg-gray-300 hover:bg-gray-400"
-            }`}
+            className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${index === activeIndex
+              ? "bg-primary scale-125"
+              : "bg-gray-300 hover:bg-gray-400"
+              }`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
@@ -164,87 +166,3 @@ export default Carousel;
 
 
 
-
-// "use client";
-
-
-
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import { Autoplay } from "swiper/modules";
-// import "swiper/css";
-// import Image from "next/image";
-
-// export default function Carousel() {
-//     return (
-//         <Swiper
-//             spaceBetween={20}
-//             slidesPerView={1}
-//             modules={[Autoplay]}
-//             autoplay={{ delay: 2500, disableOnInteraction: false }}
-//         >
-//              <SwiperSlide>
-//                 <div className="swiper-image-wrapper aspect-video rounded-xl relative ">
-//                     <Image
-//                         src="/hero2.jpg"
-//                         alt="Banner 2"
-//                         fill
-//                         style={{ objectFit: 'cover' }}
-//                         sizes="(max-width: 1200px) 100vw, 1200px"
-//                     />
-//                 </div>
-//             </SwiperSlide>
-//             <SwiperSlide>
-//                 {/* 1. Add a wrapper div with a class for styling.
-//                   2. Make the wrapper position: relative for 'fill' to work.
-//                 */}
-//                 <div className="swiper-image-wrapper relative aspect-video ">
-//                     <Image
-//                         src="/hero1.jpg"
-//                         alt="Banner 1"
-//                         fill // 👈 Use 'fill' instead of fixed width/height
-//                         priority // Optional: For the first image, if it's above the fold
-//                         style={{ objectFit: 'cover' }} // 👈 Ensures the image covers the container
-//                         sizes="(max-width: 1200px) 100vw, 1200px" // Optimization for screen sizes
-//                     />
-//                 </div>
-//             </SwiperSlide>
-//             <SwiperSlide>
-//                 <div className="swiper-image-wrapper aspect-video rounded-xl relative ">
-//                     <Image
-//                         src="/hero2.jpg"
-//                         alt="Banner 2"
-//                         fill
-//                         style={{ objectFit: 'cover' }}
-//                         sizes="(max-width: 1200px) 100vw, 1200px"
-//                     />
-//                 </div>
-//             </SwiperSlide>
-//             <SwiperSlide>
-//                 <div className="swiper-image-wrapper relative aspect-video">
-//                     <Image
-//                         src="/hero3.jpg"
-//                         alt="Banner 3"
-//                         fill
-//                         style={{ objectFit: 'cover' }}
-//                         sizes="(max-width: 1200px) 100vw, 1200px"
-//                     />
-//                 </div>
-//             </SwiperSlide>
-//              <SwiperSlide>
-//                 {/* 1. Add a wrapper div with a class for styling.
-//                   2. Make the wrapper position: relative for 'fill' to work.
-//                 */}
-//                 <div className="swiper-image-wrapper relative aspect-video ">
-//                     <Image
-//                         src="/hero1.jpg"
-//                         alt="Banner 1"
-//                         fill // 👈 Use 'fill' instead of fixed width/height
-//                         priority // Optional: For the first image, if it's above the fold
-//                         style={{ objectFit: 'cover' }} // 👈 Ensures the image covers the container
-//                         sizes="(max-width: 1200px) 100vw, 1200px" // Optimization for screen sizes
-//                     />
-//                 </div>
-//             </SwiperSlide>
-//         </Swiper>
-//     );
-// }

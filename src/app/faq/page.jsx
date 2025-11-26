@@ -157,19 +157,40 @@ export default function FAQSection() {
                 </div>
 
                 {/* Contact CTA */}
-                <div className="mt-20 text-center bg-linear-to-r from-orange-500 to-amber-400 text-white p-12 rounded-3xl shadow-2xl">
-                    <h3 className="text-3xl font-bold mb-4">Still Have Questions?</h3>
-                    <p className="text-xl mb-8 text-orange-100">
+                <div className="
+                         mt-12 sm:mt-20 text-center 
+                             bg-linear-to-r from-orange-500 to-amber-400 
+                            text-white 
+                                  p-6 sm:p-12 
+                                        rounded-3xl shadow-2xl
+                                         ">
+                    <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
+                        Still Have Questions?
+                    </h3>
+
+                    <p className="text-base sm:text-xl mb-6 sm:mb-8 text-orange-100 px-2">
                         Our support team is here to help you 24/7
                     </p>
+
                     <a
-                        href="mailto:nexcart@gmail.com"
-                        className="inline-flex items-center gap-3 bg-white text-orange-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-orange-50 transition shadow-lg"
-                    >
-                        <Mail className="w-6 h-6" />
-                        Email Us: nexcart.support@gmail.com
+                        href=""
+                        className="
+                            inline-flex flex-wrap justify-center items-center gap-2 sm:gap-3
+                             bg-white text-orange-600 
+                               px-6 sm:px-8 
+                              py-3 sm:py-4 
+                              rounded-full 
+                              font-semibold 
+                                text-base sm:text-lg 
+                             hover:bg-orange-50 transition shadow-lg
+                               max-w-full
+                                        "
+                                          >
+                         <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
+                        <span className="break-all">Email Us: nexcart.support@gmail.com</span>
                     </a>
                 </div>
+
             </div>
         </section>
     );

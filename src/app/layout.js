@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import {
   ClerkProvider,
 } from '@clerk/nextjs'
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -44,6 +45,7 @@ export default function RootLayout({ children }) {
       >
         <Navbar></Navbar>
         <div className="w-11/12 mx-auto">{children}</div>
+        <Toaster/>
         <Footer></Footer>
       </body>
     </html>

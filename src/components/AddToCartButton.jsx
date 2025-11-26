@@ -15,7 +15,7 @@ export default function AddToCartButton({ productId }) {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/cart", {
+      const res = await fetch("https://nexcart-server.onrender.com/cart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -24,6 +24,8 @@ export default function AddToCartButton({ productId }) {
           quantity: 1,
         }),
       });
+
+      if (!res.ok) throw new Error("Failed");
 
       toast.success("Added to cart!", {
         icon: "🛒",
@@ -34,19 +36,18 @@ export default function AddToCartButton({ productId }) {
           color: "#fff",
         },
       });
-
-      const data = await res.json();
     } catch (err) {
-      toast.error("Failed to add!");
+      toast.error("Failed to add item");
     }
   };
 
   return (
     <button
       onClick={handleAddToCart}
-      className="btn bg-linear-to-r from-orange-500 to-amber-200 w-full border-0 shadow-2xl flex items-center gap-2"
+      className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-4 rounded-xl shadow-2xl flex items-center justify-center gap-3 transition-all duration-300 active:scale-95"
     >
-      <ShoppingCart size={20} /> Add to Cart
+      <ShoppingCart size={22} />
+      Add to Cart
     </button>
   );
 }

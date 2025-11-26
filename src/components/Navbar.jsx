@@ -23,7 +23,7 @@ const Navbar = () => {
             // - Or near the top (< 100px)
             if (currentScrollPos < prevScrollPos || currentScrollPos < 100) {
                 setVisible(true);
-            } 
+            }
             // Hide only when scrolling down AND past 100px
             else if (currentScrollPos > prevScrollPos && currentScrollPos > 100) {
                 setVisible(false);
@@ -54,9 +54,18 @@ const Navbar = () => {
         <>
             <li><NavLink className='font-semibold' href='/' > Home </NavLink></li>
             <li><NavLink className='font-semibold' href='/products' > All Products </NavLink></li>
+            {
+                isSignedIn ? <li><NavLink className='font-semibold' href='/cart' > Cart </NavLink></li> : ""
+            }
             <li><NavLink className='font-semibold' href='/about' > About Us </NavLink></li>
-            <li><NavLink className='font-semibold' href='/cart' > Cart </NavLink></li>
             <li><NavLink className='font-semibold' href='/faq' > FAQ </NavLink></li>
+
+            {
+                isSignedIn? "": <li><NavLink className='font-semibold' href='/register' > Register </NavLink></li>
+            }
+           
+
+
         </>
     );
 
@@ -66,7 +75,7 @@ const Navbar = () => {
             <div
                 className={`
                     navbar fixed top-0 left-0 right-0 z-50 
-                    bg-linear-to-r from-orange-50 to-orange-100 shadow-xl
+                    bg-linear-to-r from-orange-100 to-amber-100 shadow-xl
                     transition-transform duration-400 ease-out
                     ${visible ? 'translate-y-0' : '-translate-y-full'}
                     will-change-transform
@@ -123,7 +132,7 @@ const Navbar = () => {
                         </div>
                     ) : (
                         <Link href='/login'>
-                            <button className='btn btn-secondary'>Login</button>
+                            <button className='btn bg-linear-to-r from-orange-500 to-amber-400 border-0 rounded-lg'>Login</button>
                         </Link>
                     )}
                 </div>
