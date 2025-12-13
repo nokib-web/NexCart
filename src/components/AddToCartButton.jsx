@@ -3,10 +3,12 @@
 import { ShoppingCart } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import toast from "react-hot-toast";
+import { useCart } from "@/context/CartContext";
 
 export default function AddToCartButton({ productId }) {
   const { user } = useUser();
   const userId = user?.id;
+  const { fetchCartCount } = useCart();
 
   const handleAddToCart = async () => {
     if (!userId) {
@@ -26,6 +28,9 @@ export default function AddToCartButton({ productId }) {
       });
 
       if (!res.ok) throw new Error("Failed");
+
+      // Update the global cart count
+      fetchCartCount();
 
       toast.success("Added to cart!", {
         icon: "🛒",

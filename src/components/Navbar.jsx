@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { ChartNoAxesGantt, CirclePlusIcon, UserRoundPen } from 'lucide-react';
+import { ChartNoAxesGantt, CirclePlusIcon, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import NavLink from './NavLink';
-import { useUser, UserButton, SignOutButton } from '@clerk/nextjs';
+import { useUser, SignOutButton } from '@clerk/nextjs';
 import useRole from "@/hooks/useRole";
 import { API_URL } from "@/config";
+import { useCart } from "@/context/CartContext";
 
 import { usePathname } from 'next/navigation';
 
@@ -15,6 +16,7 @@ const Navbar = () => {
     const { isLoaded, isSignedIn, user } = useUser();
     const { role } = useRole();
     const pathname = usePathname();
+    const { cartCount } = useCart();
 
     // Scroll state
     const [visible, setVisible] = useState(true);
@@ -81,7 +83,7 @@ const Navbar = () => {
             <li><NavLink className='font-semibold text-lg' href='/' onClick={() => setIsMobileMenuOpen(false)}> Home </NavLink></li>
             <li><NavLink className='font-semibold text-lg' href='/products' onClick={() => setIsMobileMenuOpen(false)}> All Products </NavLink></li>
             {
-                isSignedIn && role === 'customer' ? <li><NavLink className='font-semibold text-lg' href='/cart' onClick={() => setIsMobileMenuOpen(false)}> Cart </NavLink></li> : ""
+                isSignedIn && role === 'customer' ? <li><NavLink className='font-semibold text-lg' href='/cart' onClick={() => setIsMobileMenuOpen(false)}> Cart ({cartCount}) </NavLink></li> : ""
             }
             <li><NavLink className='font-semibold text-lg' href='/company/about' onClick={() => setIsMobileMenuOpen(false)}> About Us </NavLink></li>
             <li><NavLink className='font-semibold text-lg' href='/company/faq' onClick={() => setIsMobileMenuOpen(false)}> FAQ </NavLink></li>
@@ -104,7 +106,8 @@ const Navbar = () => {
                 <p className="text-sm text-gray-500">{user?.primaryEmailAddress?.emailAddress}</p>
             </div>
 
-            <li><NavLink href='/profile' onClick={() => setIsProfileMenuOpen(false)}> <UserRoundPen /> Profile</NavLink></li>
+            {/* Profile Link Removed as per request */}
+
             {
                 role === 'seller' || role === 'admin' ? <>
                     <li><NavLink href='/dashboard/add-products' onClick={() => setIsProfileMenuOpen(false)}> <CirclePlusIcon /> Add Products</NavLink></li>
@@ -128,7 +131,7 @@ const Navbar = () => {
                     fixed top-0 left-0 right-0 z-50 
                     bg-linear-to-r from-orange-100 to-amber-100 shadow-xl
                     transition-transform duration-400 ease-out
-                    ${visible ? 'translate-y-0' : '-translate-y-full'}
+                    ${visible ? 'translate-x-0' : '-translate-y-full'}
                     will-change-transform
                 `}
                 style={{ backdropFilter: visible ? 'blur(10px)' : 'none' }}
@@ -164,7 +167,6 @@ const Navbar = () => {
                         <ul className="menu menu-horizontal px-1 font-semibold">
                             <li><NavLink href='/'> Home </NavLink></li>
                             <li><NavLink href='/products'> All Products </NavLink></li>
-                            {isSignedIn && role === 'customer' && <li><NavLink href='/cart'> Cart </NavLink></li>}
                             <li><NavLink href='/company/about'> About Us </NavLink></li>
                             <li><NavLink href='/company/faq'> FAQ </NavLink></li>
                             {
@@ -176,6 +178,19 @@ const Navbar = () => {
                     </div>
 
                     <div className="navbar-end">
+                        {/* Cart Icon */}
+                        {isSignedIn && role === 'customer' && (
+                            <Link href="/cart" className="btn btn-ghost btn-circle mr-2 relative">
+                                <ShoppingCart className="w-6 h-6" />
+                                {cartCount > 0 && (
+                                    <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/4 -translate-y-1/4">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </Link>
+                        )}
+
+
                         {isSignedIn ? (
                             // Avatar Button - Opens Right Sidebar (Profile)
                             <button onClick={() => setIsProfileMenuOpen(true)} className="btn btn-ghost btn-circle avatar">

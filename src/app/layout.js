@@ -2,6 +2,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { CartProvider } from "@/context/CartContext";
 
 import {
   ClerkProvider,
@@ -39,17 +40,19 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <html lang="en" className={inter.className} >
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          suppressHydrationWarning={true}
-        >
-          <Navbar  />
-          <div className="max-w-7xl mx-auto">{children}</div>
-          <Toaster />
-          <Footer></Footer>
-        </body>
-      </html>
+      <CartProvider>
+        <html lang="en" className={inter.className} >
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            suppressHydrationWarning={true}
+          >
+            <Navbar />
+            <div className="max-w-7xl mx-auto">{children}</div>
+            <Toaster />
+            <Footer></Footer>
+          </body>
+        </html>
+      </CartProvider>
     </ClerkProvider>
   );
 }

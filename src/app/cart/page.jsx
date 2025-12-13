@@ -7,11 +7,13 @@ import { Trash2, Plus, Minus, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { API_URL } from "@/config";
+import { useCart } from "@/context/CartContext";
 
 export default function CartPage() {
   const { user } = useUser();
   const userId = user?.id;
   const router = useRouter();
+  const { fetchCartCount } = useCart();
 
   const [cart, setCart] = useState([]);
   const [enrichedCart, setEnrichedCart] = useState([]);
@@ -94,6 +96,7 @@ export default function CartPage() {
             item._id === cartItemId ? { ...item, quantity: newQty } : item
           )
         );
+        fetchCartCount();
         toast.success("Cart updated");
       }
     } catch (err) {
@@ -111,6 +114,7 @@ export default function CartPage() {
     try {
       await fetch(`${API_URL}/cart/${cartItemId}`, { method: "DELETE" });
       setCart(prev => prev.filter(item => item._id !== cartItemId));
+      fetchCartCount();
       toast.success("Removed from cart");
     } catch (err) {
       toast.error("Failed to remove");
@@ -158,6 +162,7 @@ export default function CartPage() {
           toast.success("Order Placed Successfully!");
           setCart([]); // Clear local state immediately for UX
           setEnrichedCart([]);
+          fetchCartCount();
           // Redirect to dashboard/orders (customer)
           router.push('/dashboard/base/orders');
         } else {
