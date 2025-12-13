@@ -1,156 +1,175 @@
-'use client';
-
-import React, { useState, useEffect, useCallback } from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
+import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
-import Image from 'next/image';
-import toast, { Toaster } from 'react-hot-toast';
+import { Edit, Trash2, Plus } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { API_URL } from '@/config';
 
-// Next.js Image component requires a placeholder for images if using external URLs
-// You should add these domains to your next.config.js if you haven't already:
-// images: { domains: ['placehold.co'] }
-
-const ManageProductsPage = () => {
+const ManageProducts = () => {
+    const { user, isLoaded } = useUser();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const EXPRESS_API_URL = 'https://nexcart-server.onrender.com/products'; // Adjust if your port/path differs
 
-    // 1. Function to fetch products
-    const fetchProducts = useCallback(async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await fetch(EXPRESS_API_URL);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            setProducts(data);
-        } catch (err) {
-            console.error("Fetch error:", err);
-            setError("Could not load products. Is the backend server running?");
-            toast.error("Failed to fetch products.");
-        } finally {
-            setLoading(false);
-        }
-    }, [EXPRESS_API_URL]);
-
-    // Fetch data on component mount
     useEffect(() => {
-        fetchProducts();
-    }, [fetchProducts]);
-
-    // 2. Function to handle deletion
-    const handleDelete = async (productId) => {
-        // Simple confirmation modal/box (replace with custom modal if preferred)
-        // NOTE: Please replace window.confirm with a custom modal UI as per instructions
-        if (!window.confirm("Are you sure you want to delete this product?")) {
-            return;
+        if (isLoaded && user?.primaryEmailAddress?.emailAddress) {
+            fetchProducts();
         }
+    }, [user, isLoaded]);
 
-        try {
-            const deleteResponse = await fetch(`${EXPRESS_API_URL}/${productId}`, {
-                method: 'DELETE',
+    const fetchProducts = () => {
+        setLoading(true);
+        // Note: Ideally backend should have a /products?sellerEmail=... or similar
+        // For now, I'll fetch all and filter in frontend OR updated backend to support query
+        // Let's assume public /products returns everything for now.
+        // A better approach is to add a query param to the backend.
+        // But looking at previous code, /products is public.
+        // I'll fetch all and filter for now to be safe without breaking backend changes yet.
+        fetch(`${API_URL}/products`)
+            .then(res => res.json())
+            .then(data => {
+                const myProducts = data.filter(p => p.sellerEmail === user.primaryEmailAddress.emailAddress);
+                setProducts(myProducts);
+            })
+            .catch(err => {
+                console.error(err);
+                toast.error("Failed to load products");
+            })
+            .finally(() => setLoading(false));
+    }
+
+    const handleDelete = (id) => {
+        if (!confirm("Are you sure you want to delete this product?")) return;
+
+        fetch(`${API_URL}/products/${id}?email=${user.primaryEmailAddress.emailAddress}`, {
+            method: 'DELETE',
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to delete");
+                return res.json();
+            })
+            .then(() => {
+                toast.success("Product deleted");
+                fetchProducts();
+            })
+            .catch(err => {
+                console.error(err);
+                toast.error("Failed to delete product");
             });
-
-            if (deleteResponse.ok) {
-                toast.success('Product deleted successfully!');
-                // Update state immediately to remove the deleted product
-                setProducts(prevProducts => prevProducts.filter(p => p._id !== productId));
-            } else {
-                const errorData = await deleteResponse.json();
-                toast.error(`Deletion failed: ${errorData.message || 'Server error'}`);
-            }
-        } catch (error) {
-            console.error("Delete error:", error);
-            toast.error('An unexpected error occurred during deletion.');
-        }
     };
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen"><span className="loading loading-spinner loading-lg text-primary"></span></div>
-        );
-    }
+    if (loading) return <div className="p-10 text-center">Loading your products...</div>;
 
-    if (error) {
-        return (
-            <div className="text-center p-8 bg-error/10 text-error-content rounded-xl m-8">
-                <h2 className="text-xl font-bold">Error</h2>
-                <p>{error}</p>
-                <button onClick={fetchProducts} className="btn btn-sm btn-error mt-4">Try Again</button>
-            </div>
-        );
-    }
-
-    if (products.length === 0) {
-        return (
-            <div className="text-center p-12">
-                <h2 className="text-2xl font-bold text-gray-700">No Products Found</h2>
-                <p className="text-gray-500 mt-2">Start by adding a new product via the Add Product page.</p>
-            </div>
-        );
-    }
-
-    // 3. Render the grid of product cards
     return (
-        <div className="container mx-auto p-4 md:p-8">
-            <Toaster position="top-right" />
-            <h1 className="text-4xl font-extrabold text-secondary mb-8">Manage All Products ({products.length})</h1>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {products.map(product => {
-                    
-                    const imageSource = product.image ? product.image : '';
-                    const title = product.name || 'Untitled';
-                    const shortDescription = product.description || 'No description available.';
-                    const price = product.price || '0.00';
-                    const linkId = product._id;
+        <div className="p-4 sm:p-6 lg:p-8">
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl sm:text-3xl font-bold">My Products</h1>
+                <Link href="/dashboard/add-products" className="btn btn-primary btn-sm sm:btn-md">
+                    <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" /> Add New
+                </Link>
+            </div>
 
-                    return (
-                        <div key={linkId} className="card bg-base-100 shadow-xl border border-gray-100 transition duration-300 hover:shadow-2xl">
-                            
-                            {/* Image */}
-                            <figure className="h-48 w-full overflow-hidden relative">
-                                <Image
-                                    src={imageSource} 
-                                    alt={title}
-                                    fill
-                                    className="object-cover transition duration-500 hover:scale-105"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                                />
-                            </figure>
+            {products.length === 0 ? (
+                <div className="text-center py-10 bg-base-100 rounded-xl shadow">
+                    <h3 className="text-lg font-semibold">No products found</h3>
+                    <p className="text-gray-500 mb-4">You haven't added any products yet.</p>
+                    <Link href="/dashboard/add-products" className="btn btn-outline btn-primary">
+                        Add your first product
+                    </Link>
+                </div>
+            ) : (
+                <>
+                    {/* Mobile: Card Layout */}
+                    <div className="block lg:hidden space-y-4">
+                        {products.map((product) => (
+                            <div key={product._id} className="card bg-base-100 shadow-xl">
+                                <div className="card-body p-5">
+                                    <div className="flex gap-4">
+                                        <div className="avatar">
+                                            <div className="w-20 h-20 rounded-xl">
+                                                <img src={product.image} alt={product.title} className="object-cover w-full h-full" />
+                                            </div>
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="font-bold text-gray-800 line-clamp-2 leading-tight">{product.title}</h3>
+                                            <p className="text-xs text-gray-500 mt-1">{product.brand}</p>
+                                            <div className="mt-2 flex flex-wrap gap-2">
+                                                <span className="badge badge-sm badge-ghost">{product.category}</span>
+                                                <span className="badge badge-sm badge-success badge-outline">In Stock</span>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                            {/* Body */}
-                            <div className="card-body p-4">
-                                <h2 className="card-title text-lg font-semibold line-clamp-2 min-h-12">
-                                    {title}
-                                </h2>
-                                <p className="text-lg font-bold text-primary">${price}</p>
-                                <p className="text-sm text-gray-500 line-clamp-3 mb-2">{shortDescription}</p>
+                                    <div className="divider my-2"></div>
 
-                                {/* Actions */}
-                                <div className="card-actions justify-end mt-2">
-                                    {/* 🟢 NEW EDIT BUTTON */}
-                                    <Link href={`/dashboard/edit-product/${linkId}`} className="btn btn-sm btn-warning text-white">
-                                        Edit
-                                    </Link>
-                                    <Link href={`/products/${linkId}`} className="btn btn-sm btn-info text-white">
-                                        View
-                                    </Link>
-                                    <button 
-                                        onClick={() => handleDelete(linkId)} 
-                                        className="btn btn-sm btn-error text-white">
-                                        Delete
-                                    </button>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-lg font-bold text-primary">${product.price}</span>
+                                        <div className="flex gap-2">
+                                            <Link href={`/dashboard/edit-product/${product._id}`} className="btn btn-sm btn-ghost">
+                                                <Edit className="w-4 h-4 text-blue-600 mr-2" /> Edit
+                                            </Link>
+                                            <button onClick={() => handleDelete(product._id)} className="btn btn-sm btn-ghost text-red-600">
+                                                <Trash2 className="w-4 h-4 mr-2" /> Delete
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
+                        ))}
+                    </div>
+
+                    {/* Desktop/Tablet: Table Layout */}
+                    <div className="hidden lg:block overflow-x-auto bg-base-100 shadow-xl rounded-xl">
+                        <table className="table w-full">
+                            <thead>
+                                <tr className="bg-base-200">
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Category</th>
+                                    <th>Stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {products.map((product) => (
+                                    <tr key={product._id} className="hover:bg-base-50">
+                                        <td className="py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="avatar">
+                                                    <div className="mask mask-squircle w-12 h-12">
+                                                        <img src={product.image} alt={product.title} />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div className="font-bold">{product.title}</div>
+                                                    <div className="text-sm opacity-50">{product.brand}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="py-4 font-bold text-primary">${product.price}</td>
+                                        <td className="py-4">
+                                            <span className="badge badge-ghost badge-sm">{product.category}</span>
+                                        </td>
+                                        <td className="py-4">
+                                            <span className="badge badge-success badge-outline">In Stock</span>
+                                        </td>
+                                        <td className="py-4 flex gap-2">
+                                            <Link href={`/dashboard/edit-product/${product._id}`} className="btn btn-ghost btn-xs">
+                                                <Edit className="w-4 h-4 text-blue-600" />
+                                            </Link>
+                                            <button onClick={() => handleDelete(product._id)} className="btn btn-ghost btn-xs text-red-600">
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </>
+            )}
+        </div >
     );
 };
 
-export default ManageProductsPage;
+export default ManageProducts;

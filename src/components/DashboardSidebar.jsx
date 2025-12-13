@@ -1,21 +1,42 @@
 'use client';
 
-import { LayoutGrid, Layers, PlusCircle, ShoppingBasket, BarChart3, Users, Settings, X } from "lucide-react";
+import { LayoutGrid, Layers, PlusCircle, ShoppingBasket, BarChart3, Users, Settings, X, ShoppingBag, Home } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import useRole from "@/hooks/useRole";
 
 export default function DashboardSidebar({ isOpen, onClose }) {
   const pathname = usePathname();
+  const { role } = useRole();
 
-  const menus = [
-    { title: "Overview", icon: <LayoutGrid className="w-5 h-5" />, link: "/dashboard" },
-    { title: "Manage Products", icon: <Layers className="w-5 h-5" />, link: "/dashboard/manage-products" },
-    { title: "Add Product", icon: <PlusCircle className="w-5 h-5" />, link: "/dashboard/add-products" },
-    { title: "Orders", icon: <ShoppingBasket className="w-5 h-5" />, link: "/dashboard" },
-    { title: "Analytics", icon: <BarChart3 className="w-5 h-5" />, link: "/dashboard" },
-    { title: "Customers", icon: <Users className="w-5 h-5" />, link: "/dashboard" },
-    { title: "Settings", icon: <Settings className="w-5 h-5" />, link: "/dashboard" },
+  const adminMenus = [
+    { title: "Overview", icon: <LayoutGrid className="w-5 h-5" />, link: "/dashboard/admin" },
+    { title: "Manage Users", icon: <Users className="w-5 h-5" />, link: "/dashboard/admin/users" },
+    { title: "Manage Products", icon: <Layers className="w-5 h-5" />, link: "/dashboard/admin/products" },
+    { title: "Manage Orders", icon: <ShoppingBasket className="w-5 h-5" />, link: "/dashboard/admin/orders" },
+    { title: "Analytics", icon: <BarChart3 className="w-5 h-5" />, link: "/dashboard/admin/analytics" },
+    { title: "Settings", icon: <Settings className="w-5 h-5" />, link: "/dashboard/settings" },
   ];
+
+  const sellerMenus = [
+    { title: "Overview", icon: <LayoutGrid className="w-5 h-5" />, link: "/dashboard/seller" },
+    { title: "Add Product", icon: <PlusCircle className="w-5 h-5" />, link: "/dashboard/add-products" },
+    { title: "My Products", icon: <Layers className="w-5 h-5" />, link: "/dashboard/manage-products" },
+    { title: "Orders", icon: <ShoppingBasket className="w-5 h-5" />, link: "/dashboard/seller/orders" },
+    { title: "Settings", icon: <Settings className="w-5 h-5" />, link: "/dashboard/settings" },
+  ];
+
+  const customerMenus = [
+    { title: "Overview", icon: <LayoutGrid className="w-5 h-5" />, link: "/dashboard" },
+    { title: "My Orders", icon: <ShoppingBag className="w-5 h-5" />, link: "/dashboard/base/orders" },
+    { title: "Settings", icon: <Settings className="w-5 h-5" />, link: "/dashboard/settings" },
+  ];
+
+  let menus = [];
+  if (role === 'admin') menus = adminMenus;
+  else if (role === 'seller') menus = sellerMenus;
+  else menus = customerMenus;
+
 
   return (
     <>
@@ -23,14 +44,14 @@ export default function DashboardSidebar({ isOpen, onClose }) {
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 bg-black bg-opacity-50  md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
         />
       )}
 
       {/* Sidebar */}
       <aside
         className={`
-          fixed md:static inset-y-0 left-0 
+          fixed md:static inset-y-0 left-0 z-50
           w-72 bg-white shadow-2xl border-r border-orange-200
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
@@ -73,6 +94,14 @@ export default function DashboardSidebar({ isOpen, onClose }) {
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* Footer Link */}
+        <div className="p-4 m-2 border-t border-orange-100">
+          <Link href="/" className="flex items-center gap-3 p-3 rounded-xl font-medium hover:bg-orange-50 text-gray-700 transition">
+            <Home className="w-5 h-5" />
+            Back to Home
+          </Link>
         </div>
       </aside>
     </>

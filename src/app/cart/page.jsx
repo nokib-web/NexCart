@@ -5,15 +5,19 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Trash2, Plus, Minus, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { API_URL } from "@/config";
 
 export default function CartPage() {
   const { user } = useUser();
   const userId = user?.id;
+  const router = useRouter();
 
   const [cart, setCart] = useState([]);
   const [enrichedCart, setEnrichedCart] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingItems, setUpdatingItems] = useState(new Set());
+  const [checkingOut, setCheckingOut] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
@@ -21,7 +25,7 @@ export default function CartPage() {
     const fetchCart = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`https://nexcart-server.onrender.com/cart/${userId}`);
+        const res = await fetch(`${API_URL}/cart/${userId}`);
         const data = await res.json();
         setCart(data);
       } catch (err) {
@@ -44,7 +48,7 @@ export default function CartPage() {
       try {
         const productIds = cart.map(item => item.productId);
 
-        const res = await fetch("https://nexcart-server.onrender.com/products/by-ids", {
+        const res = await fetch(`${API_URL}/products/by-ids`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ productIds }),
@@ -78,7 +82,7 @@ export default function CartPage() {
     setUpdatingItems(prev => new Set(prev).add(cartItemId));
 
     try {
-      const res = await fetch(`https://nexcart-server.onrender.com/cart/${cartItemId}`, {
+      const res = await fetch(`${API_URL}/cart/${cartItemId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity: newQty }),
@@ -105,13 +109,85 @@ export default function CartPage() {
 
   const removeItem = async (cartItemId) => {
     try {
-      await fetch(`https://nexcart-server.onrender.com/cart/${cartItemId}`, { method: "DELETE" });
+      await fetch(`${API_URL}/cart/${cartItemId}`, { method: "DELETE" });
       setCart(prev => prev.filter(item => item._id !== cartItemId));
       toast.success("Removed from cart");
     } catch (err) {
       toast.error("Failed to remove");
     }
   };
+
+  const [paymentMethod, setPaymentMethod] = useState('online');
+
+  const handleCheckout = async () => {
+    setCheckingOut(true);
+    try {
+      const orderData = {
+        userId: userId,
+        customerEmail: user?.primaryEmailAddress?.emailAddress,
+        items: enrichedCart.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity,
+          price: item.product?.price,
+          name: item.product?.name,
+          image: item.product?.image,
+          sellerEmail: item.product?.sellerEmail
+        })),
+        totalPrice: parseFloat(enrichedCart.reduce(
+          (sum, item) => sum + (item.product?.price || 0) * item.quantity,
+          0
+        ).toFixed(2)),
+        customerName: user?.fullName || user?.firstName || 'Valued Customer',
+        paymentMethod: paymentMethod,
+      }
+
+      if (paymentMethod === 'cod') {
+        // Cash on Delivery Logic
+        const res = await fetch(`${API_URL}/orders`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...orderData,
+            status: 'pending',
+            paymentStatus: 'unpaid',
+            transactionId: `COD-${Date.now()}` // Generate a dummy ID for COD
+          }),
+        });
+
+        if (res.ok) {
+          toast.success("Order Placed Successfully!");
+          setCart([]); // Clear local state immediately for UX
+          setEnrichedCart([]);
+          // Redirect to dashboard/orders (customer)
+          router.push('/dashboard/base/orders');
+        } else {
+          toast.error("Failed to place order.");
+          setCheckingOut(false);
+        }
+
+      } else {
+        // Online Payment Logic (SSLCommerz)
+        const res = await fetch(`${API_URL}/create-payment`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData),
+        });
+
+        const data = await res.json();
+        if (data.url) {
+          window.location.replace(data.url);
+        } else {
+          toast.error("Failed to initiate payment.");
+          setCheckingOut(false);
+        }
+      }
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong.");
+      setCheckingOut(false);
+    }
+  }
 
   if (!userId) {
     return <p className="text-center py-20 text-xl">Please login to view your cart.</p>;
@@ -239,10 +315,41 @@ export default function CartPage() {
                     <span>${totalPrice}</span>
                   </div>
                 </div>
+
+                {/* Payment Method Selection */}
+                <div className="pt-6">
+                  <h3 className="font-semibold mb-3">Payment Method</h3>
+                  <div className="flex flex-col gap-2">
+                    <label className="label cursor-pointer justify-start gap-3 bg-white/20 p-3 rounded-lg hover:bg-white/30 transition">
+                      <input
+                        type="radio"
+                        name="radio-payment"
+                        className="radio radio-primary border-white checked:border-white"
+                        checked={paymentMethod === 'online'}
+                        onChange={() => setPaymentMethod('online')}
+                      />
+                      <span className="label-text text-white font-medium">Pay Online (SSLCommerz)</span>
+                    </label>
+                    <label className="label cursor-pointer justify-start gap-3 bg-white/20 p-3 rounded-lg hover:bg-white/30 transition">
+                      <input
+                        type="radio"
+                        name="radio-payment"
+                        className="radio radio-primary border-white checked:border-white"
+                        checked={paymentMethod === 'cod'}
+                        onChange={() => setPaymentMethod('cod')}
+                      />
+                      <span className="label-text text-white font-medium">Cash on Delivery</span>
+                    </label>
+                  </div>
+                </div>
               </div>
 
-              <button className="w-full mt-8 py-4 bg-white text-orange-500 font-bold text-lg rounded-xl hover:bg-orange-50 transition">
-                Proceed to Checkout
+              <button
+                onClick={handleCheckout}
+                disabled={checkingOut}
+                className="w-full mt-8 py-4 bg-white text-orange-500 font-bold text-lg rounded-xl hover:bg-orange-50 transition"
+              >
+                {checkingOut ? 'Processing...' : 'Proceed to Checkout'}
               </button>
             </div>
           </div>

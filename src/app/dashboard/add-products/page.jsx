@@ -1,18 +1,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast'; // You still need react-hot-toast for the message
-
-// No longer need: import { useAuth } from '@clerk/nextjs'; 
+import toast, { Toaster } from 'react-hot-toast';
+import { useUser } from '@clerk/nextjs';
+import { API_URL } from '@/config';
 
 const AddProductPage = () => {
-    // We removed useAuth(), so the form submission is simpler
+    const { user } = useUser();
 
     const [formData, setFormData] = useState({
         name: '',
         material: '',
         description: '',
-        price: '', // The number field (e.g., Price)
+        price: '',
         image: '',
     });
     const [loading, setLoading] = useState(false);
@@ -27,27 +27,31 @@ const AddProductPage = () => {
         setLoading(true);
 
         try {
-            // 1. No token required! The fetch call is much simpler.
-            const res = await fetch('https://nexcart-server.onrender.com/products', { // <-- Use the correct Express URL
+            const productData = {
+                ...formData,
+                email: user?.primaryEmailAddress?.emailAddress,
+                sellerEmail: user?.primaryEmailAddress?.emailAddress,
+            }
+
+            const res = await fetch(`${API_URL}/products`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 2. Authorization header is REMOVED
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(productData),
             });
 
             if (res.ok) {
-                toast.success('🎉 Product added successfully!');
-                // Reset form fields
+                toast.success(' Product added successfully!');
                 setFormData({ name: '', description: '', material: '', price: '', image: '' });
             } else {
-                toast.error(`❌ Failed to add product. Status: ${res.status}`);
+                toast.error(` Failed to add product. Status: ${res.status}`);
             }
 
         } catch (error) {
             console.error('Submission error:', error);
             toast.error('An unexpected error occurred. Is your backend running?');
+            setLoading(false);
         } finally {
             setLoading(false);
         }
@@ -91,7 +95,7 @@ const AddProductPage = () => {
                             <span className="loading loading-spinner"></span>
                             Adding...
                         </>
-                    ) : 'Submit (Add Product)'}
+                    ) : 'Add Product'}
                 </button>
             </form>
         </div>

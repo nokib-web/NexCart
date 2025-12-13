@@ -1,11 +1,20 @@
 import ProductCard from '@/components/ProductCard';
 import { Search } from 'lucide-react';
 import React from 'react';
+import { API_URL } from '@/config';
 
 const Products = async () => {
-    const data = await fetch('https://nexcart-server.onrender.com/products')
-    const products = await data.json()
-    console.log(products)
+    let products = [];
+    try {
+        const data = await fetch(`${API_URL}/products`, { cache: 'no-store' }); // Ensure fresh data
+        if (data.ok) {
+            products = await data.json();
+        } else {
+            console.error("Failed to fetch products:", data.statusText);
+        }
+    } catch (err) {
+        console.error("Error fetching products:", err);
+    }
 
     return (
         <div>
