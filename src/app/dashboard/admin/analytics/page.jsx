@@ -7,36 +7,37 @@ const AdminAnalytics = () => {
             <h1 className="text-3xl font-bold mb-8">Analytics Dashboard</h1>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div className="stats shadow bg-base-100">
-                    <div className="stat">
-                        <div className="stat-title">Total Users</div>
-                        <div className="stat-value text-primary">89</div>
-                        <div className="stat-desc">21% more than last month</div>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+                <div className="stats shadow bg-base-100 w-full">
+                    <div className="stat p-4">
+                        <div className="stat-title text-xs sm:text-sm">Total Users</div>
+                        <div className="stat-value text-primary text-2xl sm:text-4xl">89</div>
+                        <div className="stat-desc text-xs">21% more than last month</div>
                     </div>
                 </div>
 
-                <div className="stats shadow bg-base-100">
-                    <div className="stat">
-                        <div className="stat-title">Total Orders</div>
-                        <div className="stat-value text-secondary">450</div>
-                        <div className="stat-desc">5% more than last month</div>
+                <div className="stats shadow bg-base-100 w-full">
+                    <div className="stat p-4">
+                        <div className="stat-title text-xs sm:text-sm">Total Orders</div>
+                        <div className="stat-value text-secondary text-2xl sm:text-4xl">450</div>
+                        <div className="stat-desc text-xs">5% more than last month</div>
                     </div>
                 </div>
 
-                <div className="stats shadow bg-base-100">
-                    <div className="stat">
-                        <div className="stat-title">Total Revenue</div>
-                        <div className="stat-value text-success">$24,500</div>
-                        <div className="stat-desc">14% more than last month</div>
+                <div className="stats shadow bg-base-100 w-full">
+                    <div className="stat p-4">
+                        <div className="stat-title text-xs sm:text-sm">Total Revenue</div>
+                        <div className="stat-value text-success text-2xl sm:text-4xl">$24.5k</div>
+                        <div className="stat-desc text-xs">14% more than last month</div>
                     </div>
                 </div>
 
-                <div className="stats shadow bg-base-100">
-                    <div className="stat">
-                        <div className="stat-title">Active Sellers</div>
-                        <div className="stat-value">12</div>
-                        <div className="stat-desc">New seller joining soon</div>
+                <div className="stats shadow bg-base-100 w-full">
+                    <div className="stat p-4">
+                        <div className="stat-title text-xs sm:text-sm">Active Sellers</div>
+                        <div className="stat-value text-2xl sm:text-4xl">12</div>
+                        <div className="stat-desc text-xs">New seller joining soon</div>
                     </div>
                 </div>
             </div>

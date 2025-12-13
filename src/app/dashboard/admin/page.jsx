@@ -2,7 +2,7 @@ export default function AdminDashboard() {
     return (
         <div>
             <h2 className="text-2xl font-bold mb-4">Admin Dashboard</h2>
-            <div className="stats shadow w-full">
+            <div className="stats stats-vertical lg:stats-horizontal shadow w-full">
                 <div className="stat">
                     <div className="stat-title">Total Users</div>
                     <div className="stat-value">1,200</div>
