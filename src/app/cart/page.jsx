@@ -135,7 +135,9 @@ export default function CartPage() {
           price: item.product?.price,
           name: item.product?.name,
           image: item.product?.image,
-          sellerEmail: item.product?.sellerEmail
+          sellerEmail: item.product?.sellerEmail,
+          size: item.size,
+          color: item.color
         })),
         totalPrice: parseFloat(enrichedCart.reduce(
           (sum, item) => sum + (item.product?.price || 0) * item.quantity,
@@ -251,6 +253,25 @@ export default function CartPage() {
                   <div className="flex-1">
                     <h3 className="text-lg sm:text-xl font-bold text-gray-800">{product.name}</h3>
                     <p className="text-gray-600 mt-1 text-sm sm:text-base">{product.category}</p>
+
+                    <div className="flex gap-4 mt-2 text-sm text-gray-500">
+                      {item.size && (
+                        <span className="flex items-center gap-1">
+                          <span className="font-semibold">Size:</span> {item.size}
+                        </span>
+                      )}
+                      {item.color && (
+                        <span className="flex items-center gap-1">
+                          <span className="font-semibold">Color:</span>
+                          <span
+                            className="w-4 h-4 rounded-full border border-gray-300 inline-block"
+                            style={{ backgroundColor: item.color }}
+                            title={item.color}
+                          ></span>
+                          {item.color}
+                        </span>
+                      )}
+                    </div>
 
                     <p className="text-xl sm:text-2xl font-bold text-orange-600 mt-3">
                       ${product.price.toFixed(2)}

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import useRole from "@/hooks/useRole";
 import { API_URL } from "@/config";
+import Link from "next/link";
 
 const SellerOrders = () => {
     const { user, isLoaded } = useUser();
@@ -43,6 +44,7 @@ const SellerOrders = () => {
                                 <th>Total</th>
                                 <th>Status</th>
                                 <th>My Items</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,14 +60,28 @@ const SellerOrders = () => {
                                     <td>
                                         <div className="flex flex-col gap-1">
                                             {order.items?.filter(i => i.sellerEmail === user?.primaryEmailAddress?.emailAddress).map((item, idx) => (
-                                                <div key={idx} className="flex items-center gap-2">
-                                                    <div className="w-6 h-6 rounded-full overflow-hidden border">
-                                                        <img src={item.image} alt={item.name} />
+                                                <div key={idx} className="flex items-center gap-2 mb-2">
+                                                    <div className="w-10 h-10 rounded-lg overflow-hidden border flex-shrink-0">
+                                                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                                                     </div>
-                                                    <span className="text-xs">{item.name} (x{item.quantity})</span>
+                                                    <div>
+                                                        <p className="text-xs font-bold line-clamp-1">{item.name}</p>
+                                                        <p className="text-[10px] text-gray-500">
+                                                            Qty: {item.quantity}
+                                                            {item.size && ` • Size: ${item.size}`}
+                                                            {item.color && ` • Color: ${item.color}`}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
+                                    </td>
+                                    <td>
+                                        <Link href={`/dashboard/seller/orders/print/${order._id}`}>
+                                            <button className="btn btn-xs btn-outline btn-info">
+                                                Print Label
+                                            </button>
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}

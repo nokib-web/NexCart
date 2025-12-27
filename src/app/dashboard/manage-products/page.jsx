@@ -25,10 +25,17 @@ const ManageProducts = () => {
         // A better approach is to add a query param to the backend.
         // But looking at previous code, /products is public.
         // I'll fetch all and filter for now to be safe without breaking backend changes yet.
-        fetch(`${API_URL}/products`)
+        fetch(`${API_URL}/products?limit=1000`)
             .then(res => res.json())
             .then(data => {
-                const myProducts = data.filter(p => p.sellerEmail === user.primaryEmailAddress.emailAddress);
+                let allProducts = [];
+                if (Array.isArray(data)) {
+                    allProducts = data;
+                } else if (data.products && Array.isArray(data.products)) {
+                    allProducts = data.products;
+                }
+
+                const myProducts = allProducts.filter(p => p.sellerEmail === user.primaryEmailAddress.emailAddress);
                 setProducts(myProducts);
             })
             .catch(err => {

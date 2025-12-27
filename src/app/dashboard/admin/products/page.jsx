@@ -19,12 +19,17 @@ const AdminManageProducts = () => {
 
     const fetchProducts = () => {
         setLoading(true);
-        // Admin should see ALL products from ALL sellers.
-        fetch(`${API_URL}/products`)
+        // Admin should see ALL products (fetching 1000 for now to cover mostly all)
+        fetch(`${API_URL}/products?limit=1000`)
             .then(res => res.json())
             .then(data => {
-                if (Array.isArray(data)) setProducts(data);
-                else setProducts([]);
+                if (data.products && Array.isArray(data.products)) {
+                    setProducts(data.products);
+                } else if (Array.isArray(data)) {
+                    setProducts(data);
+                } else {
+                    setProducts([]);
+                }
             })
             .catch(err => {
                 console.error(err);
@@ -102,7 +107,7 @@ const AdminManageProducts = () => {
                                         </td>
                                         <td>
                                             <div className="text-sm opacity-70">
-                                                {product.sellerEmail || "Unknown"}
+                                                {product.sellerEmail || product.email || "Unknown"}
                                             </div>
                                         </td>
                                         <td>${product.price}</td>
@@ -136,7 +141,7 @@ const AdminManageProducts = () => {
                                     <div>
                                         <h3 className="font-bold text-gray-800 line-clamp-1">{product.title}</h3>
                                         <p className="text-xs text-gray-500">{product.brand}</p>
-                                        <p className="text-xs text-gray-400 mt-1 line-clamp-1">Seller: {product.sellerEmail}</p>
+                                        <p className="text-xs text-gray-400 mt-1 line-clamp-1">Seller: {product.sellerEmail || product.email}</p>
                                     </div>
 
                                     <div className="flex justify-between items-end mt-2">

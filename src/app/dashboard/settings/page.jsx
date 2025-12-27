@@ -10,19 +10,18 @@ const SettingsPage = () => {
     ];
 
     useEffect(() => {
-        // Get current theme from local storage if available
+        // Initialize theme-change
+        const { themeChange } = require('theme-change');
+        themeChange(false);
+        // Set initial state from local storage for the select value
         const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            setCurrentTheme(savedTheme);
-            document.querySelector('html').setAttribute('data-theme', savedTheme);
-        }
+        if (savedTheme) setCurrentTheme(savedTheme);
     }, []);
 
     const handleThemeChange = (e) => {
         const theme = e.target.value;
         setCurrentTheme(theme);
-        localStorage.setItem('theme', theme);
-        document.querySelector('html').setAttribute('data-theme', theme);
+        // theme-change library handles the actual attribute setting via data-set-theme or data-choose-theme
     };
 
     return (
