@@ -43,3 +43,6 @@ next-env.d.ts
 
 # clerk configuration (can include secrets)
 /.clerk/
+temp_auto_push.bat
+temp_interactive_push.bat
+branch_structure.json
